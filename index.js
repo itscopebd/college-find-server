@@ -62,8 +62,29 @@ async function run() {
     app.post("/save-apply-info", async (req, res) => {
 
       const data = req.body;
-      const result = await apply_information.insertOne(data);
-      res.send(result)
+      const email = data.admissionEmail;
+      const subject = data.subject;
+
+      // const check = apply_information.find(
+      //   {
+      //     $and: [
+      //       {
+      //         admissionEmail: email
+      //       },
+      //       {
+      //         subject: subject
+      //       }
+      //     ]
+      //   }
+      // );
+      // if (check) {
+      //   return res.send({ message: "You Already Applyed This Subject ! " })
+      // }
+      
+        const result = await apply_information.insertOne(data);
+        res.send(result)
+    
+
 
     })
     // student research api 
