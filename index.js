@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 require('dotenv').config()
 const cors = require('cors');
-const { MongoClient, ServerApiVersion, Collection } = require('mongodb');
+const { MongoClient, ServerApiVersion, Collection, ObjectId } = require('mongodb');
 
 app.use(cors())
 app.use(express.json())
@@ -32,6 +32,7 @@ async function run() {
   try {
     const college_list = client.db("college-find").collection("college-list")
     const apply_information = client.db("college-find").collection("apply-information")
+    const research = client.db("college-find").collection("research")
 
 
 
@@ -44,6 +45,18 @@ async function run() {
 
     })
 
+
+    // details college api 
+
+    app.get("/details/:id", async (req, res) => {
+      const id = req.params.id;
+
+      const query = { _id: new ObjectId(id) };
+      const result = await college_list.findOne(query);
+      res.send(result)
+    })
+
+
     // apply information api 
 
     app.post("/save-apply-info", async (req, res) => {
@@ -53,7 +66,21 @@ async function run() {
       res.send(result)
 
     })
+    // student research api 
+    app.get("/research-data", async (req, res) => {
 
+      const result = await research.find().toArray()
+      res.send(result)
+
+    })
+
+    app.get("/research-details/:id", async (req, res) => {
+      const id = req.params.id;
+
+      const query = { _id: new ObjectId(id) };
+      const result = await research.findOne(query);
+      res.send(result)
+    })
 
 
 
